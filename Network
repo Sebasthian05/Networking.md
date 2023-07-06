@@ -1,0 +1,288 @@
+DAY 1 ### NETWORK FUNDAMENTALS ###
+Mathematics of Networking
+
+Binary Identification
+- Bit is on/off 
+
+
+
+Number of Bits 
+1          Bit/Flag
+4          Nibble
+8          Byte/Octet
+16         Half Word
+32         Word
+64         Very Long Word
+
+
+Common Formats
+BASE(N) FORMATS
+Base(2) = 0101010101
+Base(10) = 66 97 193 115 935
+Base(16) = 42 61 73 1A 4D
+Base(64) = QmFzZSA2NA==
+
+Message Formatting Method
+Encapsulation and Decapsulation
+- When tansfering data, layer headers on taken off when they hit their respective layers
+- Same when getting ready to send data, it covers the data with the appropriate layers 
+
+RFC(REQUEST FOR COMMENT)
+- text file that goes in depth of certain topic 
+- standard for information
+
+OSI MODEL
+Physical Layer
+- Hardware Specifications 
+- Encoding and Signaling 
+- Data Transmission and Reception
+- Physical Network Design
+
+Data Link Sub-Layers
+Two Types
+- MAC (Media Access Control)
+- LLC (Logical Link Control)
+
+Ethernet Header
+- Dest. MAC [01 - 06]
+- Src. MAC [07 - 12]
+- Ethertype [13 - 14] ## is important since it shows the next layer type 
+
+if you use a VLAN Ethertype it will add 4 bytes 
+- Tag Protocol ID (0x8100)
+- PCP/DEI (3 bits)
+- QoS (1 bit)
+- VLAN ID (12 bits)
+
+ARP Header in Slides
+
+ECN Bit Shift for actual number ??
+DSCP is 3 Nibbles and ECN is 1 Nibble
+
+Network Header
+How to calculate fragementation offset Formula (Miro Ship Example)
+
+Fingerprinting 
+Gives best guess of OS with the Networking Standard
+
+ICMP is ping but also other things
+ping is two types of ICMP traffic Echo Request/Echo Reply
+
+Transport Layer
+two transporting types (TCP and UDP)
+- TCP Flags are important since they start the three-way handshake
+
+TCP Flags 
+
+Coach Explained to the University of Alabama to Play Really Strong Football
+TCP Flag Breakout (Binary and Hex)
+CWR == 0x128
+ECN == 0x64
+URG == 0x32
+ACK == 0x16
+PSH == 0x08
+RST == 0x04
+SYN == 0x02
+FIN == 0x01
+
+UDP Header
+
+
+Sesion Layer
+Protocols
+- SOCKS
+- NetBIOS
+- PPTP/L2TP
+- RPC
+
+SOCKS 4/5 (TCP 1080)
+
+PPTP (TCP 1723)
+
+L2TP (TCP 1701)
+
+SMB/CIFS (TCP 139/445 AND UDP 137/138)
+
+RPC (ANY PORT)
+
+PRESENTATION LAYER
+Responsibilites
+- Translation
+- Formating 
+- Encoding (ASCII,EBCDIC,HEX,BASE64)
+- Encryption (Symmetric or Asymmetric)
+### Symmetric easier to decrypt
+### Asymmetric Longer to decode but no previous log on required 
+- Compression
+
+Application Layer
+FTP (TCP 20/21)
+
+Servers is a socket, what makes a server a server is the listening port on the box 
+
+FTP needs both port 20 and 21 to work
+
+Network Traffic Sniffing 
+- Libpcap ("Linux")
+- WinPcap
+- NPCAP ("Current for Windows")
+
+Userspace is anything the current user has logged into 
+
+Wireshark, TCPDUMP and BPFS
+Wireshark (options)
+- protocol heiarchy
+- go to wireshark preferences to see wihj mods you enjoy
+- you shouldn't be able to see any traffic
+
+BERKELEY PACKET FILTERS 
+tcpdump 'ether[12:2] = 0x0800 && (tcp[2:2] != 22 && tcp[2:2] != 23)'
+- looks for IPv4 Packets but not port 22 or 23
+- do it through network layers, checks the ethertype and the dest. bytes 
+
+tcpdump -r "PCAP" 'tcp[13] & 0x10 = 0x10'
+
+tcpdump -r "PCAP" 'ip[1] & 0xFC = 4'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
