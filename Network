@@ -145,35 +145,54 @@ tcpdump -r "PCAP" 'tcp[13] & 0x10 = 0x10'
 tcpdump -r "PCAP" 'ip[1] & 0xFC = 4'
 
 
+ARP Filter
+- To find the ARP STORM find the MAC Addr Broadcasting to all
+- You can also find MitM attacks if you look at traffic and see which one is directing a MAC to another location then intended
+  EX: 7014 | fa:16:3e:35:21:5a | fa:16:3e:b3:e4:46 | ARP | 42 | 172.16.1.254 is at fa:16:3e:35:21:5a
+
+Gratuitous ARP opcode is 0x02
+RARP request opcode is 0x03
+RARP response opcode is 0x04
+To use opcodes with arp.opcode == 0x0#
+
+CDP is Cisco Discovery Protocol ### shows Cisco Version info
+
+Link Layer Discovery Protocol
+
+STP is Spanning Tree Protocol
+- to find the root bridge protocol priority go to Bridge Identifiers for number
+
+Windows Sends all Keyboard values for ping messages 
+
+ICMPv6 type #
+type 128 - echo request 
+type 129 - echo reply
+type 134 - Router Advertisement
 
 
 
 
 
 
+(9,99,99,88,214,137) these 6 numbers following in the servers response break down as follows:
+
+First 4 are the ip address: 9.99.99.88 
+
+The fifth and sixth numbers are the port. You take the fifth number multiply it by 256 then add the sixth number:
+
+214 * 256 = 54784 + 137 = 54921
+
+tls.handshake.type == 1
 
 
 
 
 
+ student13
 
+Command: ssh student@10.50.43.2 -X
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Password: password
 
 
 
