@@ -229,11 +229,11 @@ sudo tcpdump -r BPFCheck.pcap 'ip[16:4] = 0x0a0a0a0a && tcp[13] = 0x00' | wc -l
 sudo tcpdump -r BPFCheck.pcap 'ether[12:4] & 0xffff0fff = 0x81000001 && ether[16:4] & 0xffff0fff = 0x8100000a' | wc -l
 
 
+https://www.gigamon.com/content/dam/resource-library/english/guide---cookbook/gu-bpf-reference-guide-gigamon-insight.pdf
+- Useful for BPF Commands and Options 
 
-
-
-
-
+https://github.com/SergK/cheatsheat-tcpdump/blob/master/tcpdump_advanced_filters.txt
+- Cheatsheet for tcpdump
 
 
 
