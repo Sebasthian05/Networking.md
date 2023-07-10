@@ -195,19 +195,19 @@ Command: ssh student@10.50.43.2 -X
 Password: password
 
 
+sudo tcpdump -r BPFCheck.pcap 'ip[6] & 64 = 64 ' | wc -l
 
+sudo tcpdump -r BPFCheck.pcap 'ip[8] <= 64 || ip6[7] <=64' | wc -l
 
+sudo tcpdump -r BPFCheck.pcap 'tcp[0:2] > 1024 || udp[0:2] > 1024' | wc -l
 
+sudo tcpdump -r BPFCheck.pcap 'ip[9] = 0x11 || ip6[6] = 0x11' | wc -l
 
+sudo tcpdump -r BPFCheck.pcap 'tcp[13] = 0x14 || tcp[13] = 0x11' | wc -l
 
-
-
-
-
-
-
-
-
+sudo tcpdump -r BPFCheck.pcap 'ip[4:2] = 213' | wc -l
+- IP ID number
+sudo tcpdump -r BPFCheck.pcap 'tcp[0:2] = 53 || udp[0:2] = 53 || tcp[2:2] = 53 || udp[2:2] = 53' | wc -l
 
 
 
