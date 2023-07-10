@@ -209,37 +209,24 @@ sudo tcpdump -r BPFCheck.pcap 'ip[4:2] = 213' | wc -l
 - IP ID number
 sudo tcpdump -r BPFCheck.pcap 'tcp[0:2] = 53 || udp[0:2] = 53 || tcp[2:2] = 53 || udp[2:2] = 53' | wc -l
 
+sudo tcpdump -r BPFCheck.pcap 'tcp[0:2] > 1024 || tcp[2:2] > 1024 && tcp[13] = 0x02' | wc -l
+
+sudo tcpdump -r BPFCheck.pcap 'ip[6] & 0x80 = 0x80' | wc -l
+
+
+sudo tcpdump -r BPFCheck.pcap 'ip[1] & 252 = 148' | wc -l
+
+or
+
+sudo tcpdump -r BPFCheck.pcap 'ip[1] >> 2  = 37' | wc -l
 
 
 
+sudo tcpdump -r BPFCheck.pcap 'ip[9] = 1 && ip[8] = 1 ||  ip[9] = 17 && ip[8] = 1 ' | wc -l
 
+sudo tcpdump -r BPFCheck.pcap 'ip[16:4] = 0x0a0a0a0a && tcp[13] = 0x00' | wc -l
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+sudo tcpdump -r BPFCheck.pcap 'ether[12:4] & 0xffff0fff = 0x81000001 && ether[16:4] & 0xffff0fff = 0x8100000a' | wc -l
 
 
 
