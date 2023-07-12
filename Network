@@ -236,52 +236,203 @@ https://github.com/SergK/cheatsheat-tcpdump/blob/master/tcpdump_advanced_filters
 - Cheatsheet for tcpdump
 
 
+DAY 2 ###NETWORK PROGRAMMING###
+Objectives
+Understand a Network Socket
+The difference between User and Kernel Sockets
+Write a Python 3 script to use Sockets
+
+Socket Types 
+Stream Sockets(TCP)
+Datagram Sockets(UDP)
+Raw Sockets(Custom/Anything)
+
+
+User Space VS Kernel Space Sockets 
+1. User Space Sockets 
+    - Stream Sockets
+    - Datagram Sockets
+2. Kernel Space Sockets
+    - Raw Sockets
+
+User Space Applications/Sockets Examples:
+- Using tcpdump or wireshark to read a file 
+- Using nmap with no switches
+- Using netcat to connect to a listener
+- Using netcat to create listener above well port range
+
+Kernel Space Application/Sockets 
+- Using tcpdump or wireshark to CAPTURE packets on the wire
+- Using nmap for OS identification 
+
+
+Understanding Python Terminology 
+Libraries - importing desired functions you want to use
 
 
 
+Network Programming with Python3 
+how to use python3 in networking: 
+import socket 
+S = socket.socket(socket.FAMILY, socket.TYPE, socket.PROTOCOL)
+
+socket.socket function 
+
+Raw Socket Use Case 
+- Testing specific defense mechanisms - suxh as triggering and IDS for an effect or filtering
+- Avoiding Defense Mechanisms
+- Obfuscating data transfer 
+
+DAY 3 ###NETWORK RECONNAISSANCE###
+Types of reconnaissance
+- Active
+- Passive
+Type of reconnaissance modes 
+- Internal
+- External
+
+Active External Recon
+- Network Scanning
+
+Active Internal Recon
+- DNS Queries
+- ARP Request
+
+Passive External Recon
+- DNS Lookups 
+- Whois Queries 
+- Job Site Listings
+
+Passive Internal Recon
+- Packet Sniffers 
+
+Passive Internal Recon 
+- Wireshark/tcpdump
+
+Passive External Recon
+- whois queries ex: whois <domain name>
+Unix tool dig
+- dig @ns1.google.com AXFR google.com
+  o AXFR is Zone Transfer for Googles DNS Server
+  o If it worked, would give information about IPs and what happens inside Server
+  o can also write command like: dig @8.8.8.8 google.com
+  o Like the first bullet, you can specify zones for IP/Domain ex: SOA, A, AAAA, PTR, MX, TXT, AXFR, CNAME, RP
+  o dig axfr @nsztm1.digi.ninja zonetransfer.me shows traffic between primary and secondary DNS server which gives hostnames, IPs, and IP blocks 
+Google Dorking
+- site:google filetype:pdf "policy" "password" - can help with bruteforcing passwords if password policy is weak enough
+Shodan
+- Shows vulnerabilities 
+WhatsMyName Web
+- Scans for Usernames on web 
+
+Active External Recon
+Network Scanning
+ - Remote to Local
+ - Local to Remote
+ - Local to Local
+ - Remote to Remote 
+Scanning Approach
+- Aim
+  o Wide range scan
+  o Target specific scan
+- Method 
+  o Single Source Scan
+  o Distributed Scan
+
+Network Scanning
+- Broadcast Ping and Ping sweep
+- ARP scan
+- SYN scan (sends a SYN and waits for SYN,ACK to be recieved NMAP
+- Full Connect scan (Three-Way Handshake, for ACK
+- Null Scan
+- FIN scan (if recieve a RST it means port is closed, If not port is either open or not setup)
+- XMAS tree scan 
+- UDP scan
+- Idle scan ( A.K.A Zombie Scan, Uses other host as proxy so doesn't show the main actor scanning also like a stealth scan waiting for RST or SYN,ACK)
+- Ack/Window scan ( uses window size to see if ports are open,closed or filtered can be unreliable )
+- Creates other source address, so you cant find the actor
+- OS Fingerprinting scan ( gives best guess on target computer)
+- version scan (gives version of protocol/service) -sV
+
+Network Scanning - Code
+ nmap [options] [Target IP/Subnet]
+ or
+ nc [options] [Target IP] [Port]
 
 
+#!/bin/bash
+echo "Enter network address (e.g. 192.168.0): "
+read net
+echo "Enter starting host range (e.g. 1): "
+read start
+echo "Enter ending host range (e.g. 254): "
+read end
+echo "Enter ports space-delimited (e.g. 21-23 80): "
+read ports
+for ((i=$start; $i<=$end; i++))
+do
+    nc -nvzw1 $net.$i $ports 2>&1 | grep -E 'succ|open'
+done
+# (-v) running verbosely (-v on Linux, -vv on Windows),
+# (-n) not resolving names. numeric only IP(no D.S)
+# (-z) without sending any data. zero-I/O mode(used for scanning)
+#(-w1) waiting no more than 1second for a connection to occur
+# (2>&1) redirect STDERR to STDOUT. Results of scan are errors and need to redirect to output to grep
+# (-E) Interpret PATTERN as an extended regular expression
+# ( | grep open) for Debian to display only open connections
+# ( | grep succeeded) for Ubuntu to display only the open connections
+
+10.50 in the virtual environment is a "public IP addr"
+10.50 IP in the Real World is a public IP so don't scan
+
+How to Enumerate 
+Run Net_Scan script
+- First 3 Octets
+- Last Octet range 
+- Port Numbers
+
+use netcat to make sure protocol is what it is 
+  - nc [Target IP] [Port]
+If it is not responding see if it is a websever by doing  GET /
+
+Run 
+nmap -A -T4 --min-rate 10000 -vvvv 10.50.30.212 - 216, -p 80 (use -p to specify certain port) (can also delimit ports and works with range )
+ - Port option 1-443 starts at 1 goes to 443
+ - Port option 1- goes to all port starts at 1
+ - Port option -443 starts at 1 goes to 443
 
 
+wget -r ftp://10.50.30.212
 
+wget -r 10.50.30.212 ### If needing to specify a port use :P# after IP
 
+eom 10.50.30.212/web.png
 
+ssh bob@10.50.30.212 -p 25
+pw:password
 
+local enumeration 
+ip address
+ip a replaces ifconfig
+ip neigh replaces arp
+ip route replcaes route 
 
+ls /usr/share/cctc
+cat /etc/services : services 
 
+cat /etc/hosts : local host
 
+ss replaces netstat
+ss -ntulp (sudo for servives)
 
+all authentication will be logged in auth.log
 
+how to find hostname 
+- cmd: hostname or hostname -f for fully qualified host name 
 
+premiscious mode accepts all packets lol
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+hostname -I shows all interfaces connected 
 
 
 
