@@ -435,6 +435,124 @@ premiscious mode accepts all packets lol
 hostname -I shows all interfaces connected 
 
 
+mimeopen -d
+
+DAY 4 ###DATA TRANSFER MOVEMENT,REDIRECTION, AND DATA TRANSFER###
+
+Common Methods For Transfering Data 
+ - TFTP
+ - FTP
+    o Active
+    o Passive
+ - SFTP
+ - SCP
+
+Trivial File Transfer Protocol (TFTP)
+ - UDP transport
+ - No terminal communication
+ - Often uused for technologies such as BOOTP and PXE
+ - No directory services 
+
+File Transfer Protocol (FTP)
+ - Uses multiple TCP connections
+ - Control Connection Port 21 / Data Connection Port 20
+ - Has Directory services
+
+Secure File Transfer Protocol
+ - TCP Port 22 
+ - Uses symmetric and asymmetric encryption
+ - Adds FTP like services to SSH 
+ - Authentication required
+
+File Transfer Protocol Secure
+ - Can be operated in 2 modes: Implicit
+
+
+Secure Copy Protocol
+ - TCP Port 22
+ - Uses symmetric and asymmettric encryption
+ - Authentication through sign in (username and password) or with SSH key
+ - Non Interactive
+ - CMD EX: scp <source> <destination>
+ - specify a port with -P option CMD EX: scp -P <port> <source> <destination>
+ - specify recursive CMD EX: scp -r <source> <destination>
+ - SCP three-way handshake CMD EX: scp -3 <source> <destination>
+
+
+ SCP Examples 
+
+ copy all files in a directory
+ scp -r /etc/ssh clarie@claire-host: 
+
+ grab toby's .bash_profile and put it into the local machine
+ scp toby@toby-host:.bash_profile .
+
+specifiy a port 
+scp -P 2222 test.txt clarie@claire-host:
+
+grabs claries etc/ssh config and moves it to the sshconfigs in toby's directory
+scp -3 -r clarie@claire-host:/etc/ssh toby@toby-host:sshconfigs/
+
+
+SCP 
+
+Netcat
+- Netcat is the "swiss army knife" networking utility which reads and writes data across network socket connections using the TCP/IP protocol
+Netcat can be used for the following
+ - inbound and outbound connections, TCP/UDP, to/or from any ports
+ - troubleshooting network connections
+ - sending/recieving data (insecurely)
+ - port scanning (similar to -sT in Nmap)
+
+root permissions
+ssh into desired host and run command 
+nc -lp <port> -e /bin/bash 
+
+run on local machine
+nc <ip> <port> 
+
+netcat relay 
+make a named pipe
+make node <name> <p option>
+
+mknod mypipe p
+
+create relay
+
+nc -lp 3333 0<mypipe | nc -lp 3334 1>mypipe
+
+set up netcat on devices you want to relay with
+nc <ip> 3333
+nc <ip> 3334
+
+you can communicate between the port 3333 and 3334
+
+sudo vim 
+
+type sh for commands? 
+nc -lp 3333 -e /bin/bash
+
+if the box doesn't have netcat you can use /dev/tcp/10.2.0.2/1111
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
