@@ -545,7 +545,7 @@ Secure SHell (SSH)
 
  - .ssh/known_host
 
- - ls //etc/ssh for key_info
+ - ls /etc/ssh for key_info
 
 SSH Port Fowarding 
 
@@ -615,7 +615,11 @@ ihost> prxoychains telnet or ssh possible for quick telnet or ssh otherwise don'
 
 etc/proxychains.conf for ip
 
+eom full/path
 
+ssh i-host@IP -R RHP:127.0.0.1:22 NT
+
+ssh net1_student13@127.0.0.1 -p 16405
 
 
 
