@@ -623,6 +623,105 @@ ssh net1_student13@127.0.0.1 -p 16405
 
 
 
+NETWORK ANALYSIS ###DAY 5###
+p0f (PASSIVE OS FINGERPRINTING)
+ - Looks at variations in inital TTL, fragmentation flag, default IP header packet length, window size, and TCP options
+ sudo p0f -r 
+
+Network Traffic Sniffing
+What makes traffic captures possible
+- Libpcap
+- WinPcap
+- NPCAP
+
+Network Traffic Baselining
+- Snapshot of what the network looks like during a time frame
+- No industry standard
+- 7 days to establish the inital snapshot
+- Prerequisite Information
+
+Network Baseline Objective
+- Determines the current state of your network
+- Ascertain the current utilization of Network resources
+- Identify normal vs peak network traffic time frames
+- Verify port / protocol usage
+
+Analyze Network Traffic Statistics
+- Protocol Hierarchy (Comparing allowed protocols to see if there is a violation)
+- Conversations (Whos talking to who)
+- Endpoints
+- I/O Graph
+- IPv4 and IPv6 Statistics
+- Expert Information
+
+Wireshark and TCPDump Demos
+- TCPDumps are more proficient since it processes data faster compared to wireshark
+
+sudo tcpdump -r pcap.pcap "tcp[13] = 0x02" | awk '{print$3}' | cut -d. -f1,2,3,4 | sort | uniq
+
+sudo tcpdump -r pcap.pcap "tcp[13] = 0x02" | awk '{print$5}' | cut -d. -f1,2,3,4 | sort | uniq
+
+
+
+ALerts logs are stuff to look at first, logs just log data 
+
+Data COllection Devices
+Sensors
+ - In-Line (Device physically on Network CAN stop traffic)
+ - Passive (Not visiable on Network, is receiving copies of network CANNOT stop traffic) 
+
+
+TAP
+SPAN is router or switch copying info to send through a port( suseptable to packet degregation)
+ARP Spoofing(MitM) Collecting data by sending it thorugh a different source 
+
+ANOMALY DETECTION
+Indicator of Attack (IOA)
+- Proactive
+- A series of actions that are suspicious together
+- Focus on Intent
+- Looks for what must happen
+
+Indicator of Compromise (IOC)
+- Reactive
+- Forensic Evidence
+- Provides Information that can change
+  o Malware, IP addresses, exploits, signatures 
+
+Indicators
+- .exe/executable files
+- NOP sled 
+- Repeated Letters
+- Well Known Signatures
+- Mismatched Protocols
+- Unusual Traffic
+- Large amounts of traffic/ unusual times 
+
+Potential Indicators of Attacks
+- Destinations
+- Ports 
+- Public Servers/DMZs
+- Off-Hours
+- Network Scans
+- Alarm Events
+- Malware Reinfection (If Malware Continues to pop up after being deleted, Might have a user that is already set in network)
+
+Potential Indicators of compromise
+- Unusal traffic outbound
+- Anomalous user login or account use
+- Size of responses for HTML
+- Writing changes to the registry/system files
+- DNS requests 
+
+
+
+
+
+
+
+
+
+
 
 
 
