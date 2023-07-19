@@ -623,7 +623,7 @@ ssh net1_student13@127.0.0.1 -p 16405
 
 
 
-NETWORK ANALYSIS ###DAY 5###
+DAY 5 ###NETWORK ANALYSIS###
 p0f (PASSIVE OS FINGERPRINTING)
  - Looks at variations in inital TTL, fragmentation flag, default IP header packet length, window size, and TCP options
  sudo p0f -r 
@@ -714,9 +714,142 @@ Potential Indicators of compromise
 - DNS requests 
 
 
+sudo p0f -r attack_analysis1.pcap | grep "192.168.10.101" -B 4 -A 4
+
+
+DAY 6 ###NETWORK TRAFFIC FILTERING###
+NETWORK FILTERING
+Practical Applications
+- Email addresses to block unwanted email and increase productivity
+- computer applications in an organization environment 
+- MAC flitering - allow only specific computers access to a network
+- Network Traffic
+
+Why Filter Network Traffic
+- Decrease load on network infrastructure
+- Ensure data gets to intended recipients and only intended reciepients
+- Block malicious traffic
+- Obfuscate network internals
+
+Filtering Concepts 
+Whitelist vs Blacklist
+Whitelist denys all, user has to allow connection
+Blacklist allows all, user has to block connectiom
+
+Network Device Operation Modes
+- Routed
+-Transparent 
+
+Intrusion Defense
+- Intrusion Dectection System
+- Intrusion Prevention System
+
+Firewall filtering methods
+- Stateless (packet) Filtering (L3+4)
+- Stateful Inspection (L4)
+- Application Layer(L7)
+
+First layer defense is firewall on ingress traffic
+
+Traffic Direction
+- Traffic originating from the localhost ot the remote-host
+- 
 
 
 
+NETFILTER NETWORK
+- packet filtering
+- stateles/stateful Firewalls
+- network address and port translation (NAT and PAT)
+- other packet manipulation 
+
+IP tables
+default tables are: filter, nat and mangle
+
+sudo iptables -L 
+to see default tables
+sudo iptables -t NAT -L
+to see default NAT tables
+sudo iptables -t mangle -L
+to see default mangle tables
+sudo iptables -F
+flushes all tables sudo iptables -A 
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+Allow anything that comes to the device and is tcp port 22 accept it
+sudo iptables -A OUTPUT -p tcp --sport 22 -j ACCEPT
+Allow anything with a source input of tcp 22 out of the device 
+
+sudo iptables -A INPUT -p tcp -m multiport --ports 6010,6011,6012 -j ACCEPT
+
+sudo iptables -A OUTPUT -p tcp -m multiport --ports 6010,6011,6012 22 -j ACCEPT
+
+sudo iptables -A INPUT -p tcp --sport 22 -j ACCEPT
+
+sudo iptables -A OUTPUT -p tcp --dport 22 -j ACCEPT
+
+sudo iptables -P OUTPUT DROP
+sudo iptables -P FORWARD DROP
+
+sudo iptables -A INPUT -p icmp --icmptype 0 -j ACCEPT
+
+sudo iptables -L -n --line-number
+shows the line number
+
+sudo iptables -D INPUT 4
+
+sudo iptables -P INPUT ACCEPT
+
+sudo iptables -P OUTPUT ACCEPT
+
+sudo iptables -P FORWARD ACCEPT
+
+
+whitelisting is drop
+blacklisting is allow/Accept
+
+NFT Tables
+nft add table ip Wev
+
+sudo nft add chain ip Wev INput { type filter hook input priority 0 \; policy accept \;}
+
+sudo nft add chain ip Wev OUTput { type filter hook output priority 0 \; policy accept \;}
+
+sudo nft add rule ip Wev INput tcp dport 22 accept
+
+sudo nft add rule ip Wev OUTput tcp sport 22 accept
+
+
+sudo nft add rule ip Wev INput tcp dport { 21,22,23,80 } accept
+
+sudo nft add rule ip Wev OUTput tcp sport { 21,22,23,80 } accept
+
+sudo nft add rule ip Wev INput tcp dport { 6010,6011,6012 } accept
+
+sudo nft add rule ip Wev OUTput tcp sport { 6010,6011,6012 } accept
+
+sudo nft add chain ip Wev INput { type filter hook input priority 0 \; policy accept \; }
+
+sudo nft flush ruleset
+
+sudo nft list ruleset
+
+sudo nft flush table ip Wev
+
+iptables -t nat -A POSTROUTING -o eth0 -j SNAT --to 1.1.1.1
+
+iptables -t nat -A POSTROUTING -o eth0 -j DNAT --to 10.0.0.1
+
+iptables -t nat -A POSTROUTING -p tcp -o eth0 -j SNAT --to 1.1.1.1:9001
+
+iptables -t nat -A POSTROUTING -p tcp -o eth0 -j DNAT --to 10.0.0.1:8080
+
+nft add rule ip NAT POSTROUTING ip saddr 10.1.0.2 oif eth0 snat 144.15.60.11
+
+nft add rule ip NAT PREROUTING iif eth0 tcp dport { 80, 443 } dnat 10.1.0.3
+
+nft add rule ip NAT POSTROUTING ip saddr 10.1.0.0/24 oif eth0 masquerade
+
+nft add rule ip NAT PREROUTING tcp dport 80 redirect to 8080
 
 
 
