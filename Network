@@ -851,6 +851,22 @@ nft add rule ip NAT POSTROUTING ip saddr 10.1.0.0/24 oif eth0 masquerade
 
 nft add rule ip NAT PREROUTING tcp dport 80 redirect to 8080
 
+1,2,3
+467accfb25050296431008a1357eacb1_05e5fb96e2a117e01fc1227f1c4d664c_9f7a33941828bdafd2755fd20176cdf4
+
+ACLs from router perspective 
+always think from prozpective of router or filtering device perspective
+
+
+common Intrusion defense systems 
+- Suricata
+- Bro Network Security Monitior
+- Security Onion
+
+SNORT IDS/IPS Rule - Header
+[Action] [protocol] [s.ip] [s.port] [direction] [d.ip] [d.port] ( match conditions ;)
+(match conditions ;)
+content: "|DEAD BEEF|"
 
 
 
@@ -858,6 +874,46 @@ nft add rule ip NAT PREROUTING tcp dport 80 redirect to 8080
 
 
 
+
+
+
+
+for revision snort rules start at 1000001
+
+failed IDS/IPS 
+two ways IDS/IPS can close
+- fail open
+- fail close
+
+
+
+
+0c2ca80fad4accccce3bcecec1d238ce
+be33fe60229f8b8ee22931a3820d30ac
+
+
+
+ssh net1_student13@192.168.0.40 -R 16475:localhost:22 -p 5555
+
+CAPSTONE
+
+
+
+
+index1 3927 MzkyNw
+index2 FF02::2 RkYwMjo6Mg
+index3 SPOOFING U1BPT0ZJTkc
+index4
+index5 500 NTAw
+index6
+
+
+tcpdump -n -r capstone-bpf.pcap 'ip[1] >> 2 = 26 && ip[16:4] = 0x0a000067' | wc -l
+packets with a DSCP of 26 being sent to the host 10.0.0.103
+tcpdump -n -r capstone-bpf.pcap 'ip[6] & 0x40 = 0x40 && tcp[13] = 5' | wc -l
+DONT FRAG ON AND ONLY HAS RST AND FIN FLAGS SET
+tcpdump -n -r capstone-bpf.pcap 'ip[6:2] & 0x3fff != 0 ' | wc -l
+What is the total number of fragmented packets?
 
 
 
