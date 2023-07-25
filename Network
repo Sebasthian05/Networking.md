@@ -904,8 +904,7 @@ index1 3927 MzkyNw
 index2 FF02::2 RkYwMjo6Mg
 index3 SPOOFING U1BPT0ZJTkc
 index4
-index5 500 NTAw
-index6
+index5 IHL x 4 - outbound packet rate / 8 = MTU RATE
 
 
 tcpdump -n -r capstone-bpf.pcap 'ip[1] >> 2 = 26 && ip[16:4] = 0x0a000067' | wc -l
@@ -914,6 +913,48 @@ tcpdump -n -r capstone-bpf.pcap 'ip[6] & 0x40 = 0x40 && tcp[13] = 5' | wc -l
 DONT FRAG ON AND ONLY HAS RST AND FIN FLAGS SET
 tcpdump -n -r capstone-bpf.pcap 'ip[6:2] & 0x3fff != 0 ' | wc -l
 What is the total number of fragmented packets?
+
+
+for TCPDUMP
+tcpdump port # -v 
+
+tcpdump port 520 -v
+for RIPv2 
+
+tcpdump port 69 -vvvX
+For Blaster W32/WORM 
+
+ sudo iptables -t mangle -A OUTPUT -j TTL --ttl-set 255
+student@internet-host-student-13:~$ sudo iptables -t mangle -A INPUT -j TTL --ttl-set 255
+student@internet-host-student-13:~$ sudo iptables -t mangle -A POSTROUTING -o eth0 -j TTL --ttl-set 255
+
+
+ssh net1_student13@10.2.2.6 -R 11315:localhost:2222 -p 7777 -NT
+
+ssh net1_student13@10.50.39.13 -p 7777 -L 11320:localhost:11315 -NT
+
+ssh net1_comrade13@localhost -p 11320
+
+ssh net1_comrade13@localhost -p 11320 -D 9050 -NT
+
+ssh net1_comrade13@localhost -L 11325:10.10.10.140:301 -p 11320 -NT
+
+ssh net1_student13@localhost -p 11325 -L 11330:192.168.10.101:22 -NT
+
+Used to change ttl of machine 
+iptables -t mangle -A POSTROUTING -o eth0 -j TTL --ttl-set 128
+
+
+xxd -r capstone-analysis_HEX-ENCODED.pcap > newfile.pcap
+
+wireshark newfile.pcap
+
+scp net1_student13@192.168.10.101:/usr/share/cctc/Flag-13f.txt .
+
+
+
+
+
 
 
 
