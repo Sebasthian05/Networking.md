@@ -952,11 +952,228 @@ wireshark newfile.pcap
 scp net1_student13@192.168.10.101:/usr/share/cctc/Flag-13f.txt .
 
 
+IPv4_RAW
+
+# for building the socket
+import socket
+
+#For system level commands 
+import sys
+
+#bin2ascii import
+import binascii
+
+# For establishing the packet structure. This allows direct access to the methods and functions in the struct module.
+from struct import *
 
 
+#Create a raw socket.
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
+except socket.error as msg:
+    print(msg)
+    sys.exit()
+
+packet = ''
+
+src_ip = "10.1.0.2"
+dst_ip = "172.16.1.15"
+
+# lets add the IPv4 header
+ip_ver_ihl = 69 # This is putting the decimal conversion of 0x45 for Version and Internet Header Length
+ip_tos = 96 	# This combines DSCP and ECN Fields 
+ip_len = 0 	# The Kernel will fill in the actual length of the packet 
+ip_id = 1984 	# This sets the IP Identification for the packet
+ip_frag = 0 	# This sets fragmentation to off
+ip_ttl = 64 	# This determines the TTL of the packet when leaving the macing 
+ip_proto = 16 	# This sets the IP protocol to CHAOS(16). IF this was 6(TCP) or 17 (UDP) additional headers would be required
+ip_check = 0 	# The kernel will find the checksum of the packet
+ip_srcadd = socket.inet_aton(src_ip) # inet_aton(string) will convert an IP address to a 32 bit binary number
+ip_dstadd = socket.inet_aton(dst_ip) #same
+
+# B = Byte | H = 2 Bytes | 4s = 4 Bytes 
+ip_header = pack('!BBHHHBBH4s4s' , ip_ver_ihl, ip_tos, ip_len, ip_id, ip_frag, ip_ttl, ip_proto, ip_check, ip_srcadd, ip_dstadd)
+
+message = b'SANTIAGOLOPEZ'
+
+#Convert last name to HEX
+message = binascii.b2a_hex(b'SANTIAGOLOPEZ')
+
+packet = ip_header + message
+
+#Send the packet
+s.sendto(packet, (dst_ip, 0))
 
 
+IPV4_TCP
+# for building the socket
+import socket
+
+#For system level commands 
+import sys
+
+#For doing an array in the TCP checksum
+import array
+
+# For establishing the packet structure. This allows direct access to the methods and functions in the struct module.
+from struct import *
 
 
+#Create a raw socket.
+try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_RAW)
+except socket.error as msg:
+    print(msg)
+    sys.exit()
+
+packet = ''
+
+src_ip = "10.10.0.40"
+dst_ip = "172.16.40.10"
+
+# lets add the IPv4 header
+ip_ver_ihl = 69 # This is putting the decimal conversion of 0x45 for Version and Internet Header Length
+ip_tos = 0 	# This combines DSCP and ECN Fields 
+ip_len = 0 	# The Kernel will fill in the actual length of the packet 
+ip_id = 2020 	# This sets the IP Identification for the packet
+ip_frag = 0 	# This sets fragmentation to off
+ip_ttl = 64 	# This determines the TTL of the packet when leaving the macing 
+ip_proto = 6 	# This sets the IP protocol to CHAOS(16). IF this was 6(TCP) or 17 (UDP) additional headers would be required
+ip_check = 0 	# The kernel will find the checksum of the packet
+ip_srcadd = socket.inet_aton(src_ip) # inet_aton(string) will convert an IP address to a 32 bit binary number
+ip_dstadd = socket.inet_aton(dst_ip) #same
+
+# B = Byte | H = 2 Bytes | 4s = 4 Bytes 
+ip_header = pack('!BBHHHBBH4s4s' , ip_ver_ihl, ip_tos, ip_len, ip_id, ip_frag, ip_ttl, ip_proto, ip_check, ip_srcadd,ip_dstadd)
+
+# TCP Header fields
+tcp_src = 54321  # Sorce Port
+tcp_dst = 1234   # Destination Port
+tcp_seq = 90210    # Sequence number
+tcp_ack_seq = 30905  #TCP ack sequence number
+tcp_data_off = 5 # Data offset specifying the size of the TCP header *4 which is 20
+tcp_reserve = 0  # the 3 reserve bits +ns flag in the reserve field
+tcp_flags = 0	 # TCP flags before the bits are turned on
+tcp_win = 65535	 # Maximum allowed window size reordered to network order
+tcp_chk = 0 	 # TCP checksum which will be calculated later on
+tcp_urg_ptr = 0	 # Urgent Pointer only if URG flag is set
+
+#Combine the left shifited 4 bit TCP offset and the reserve field
+tcp_off_res = (tcp_data_off << 4) + tcp_reserve
+
+#TCP flags by bit starting from right to left
+tcp_fin = 0 	#Finished
+tcp_syn = 1 	#Synchronization
+tcp_rst = 0 	#Reset
+tcp_psh = 0	#Push
+tcp_ack = 0 	#Acknowledgement
+tcp_urg = 0 	#Urgent
+tcp_ece = 0 	#Explicit Congestion Notification Echo
+tcp_cwr = 0 	#Congestion Window Reduced 
+
+#Combine the tcp flags by left shifting the bit locations and adding the bits together
+tcp_flags = tcp_fin + (tcp_syn << 1) + (tcp_rst << 2) + (tcp_psh << 3) + (tcp_ack << 4) + (tcp_urg << 5) + (tcp_ece << 6) + (tcp_cwr << 7)
+
+# The ! in the packet format strings means network order
+# # B = 1 Byte H = 2 bytes L = 4 bytes (integer)
+tcp_hdr = pack('!HHLLBBHHH', tcp_src, tcp_dst, tcp_seq, tcp_ack_seq, tcp_off_res, tcp_flags, tcp_win, tcp_chk, tcp_urg_ptr)
+
+user_data = b'BOOMSHAKALAKA'
+
+#Pseudo header fields
+src_address = socket.inet_aton(src_ip)
+dst_address = socket.inet_aton(dst_ip)
+reserved = 0
+protocol = socket.IPPROTO_TCP
+tcp_length = len(tcp_hdr) + len(user_data)
+
+#pack the psuedo header and combine with user data
+ps_hdr = pack('!4s4sBBH', src_address, dst_address, reserved, protocol, tcp_length)
+ps_hdr = ps_hdr + tcp_hdr + user_data
+
+def checksum(data):
+	if len(data) % 2 != 0:
+		data += b'\0'
+	res = sum(array.array("H",data))
+	res = (res >> 16) + (res & 0xffff)
+	res += res >> 16
+	return (~res) & 0xffff
+
+tcp_chk = checksum(ps_hdr)
+
+#Pack the TCP header to fill in the correct checksum - remember checksum is NOT in network byte order
+tcp_hdr = pack('!HHLLBBH', tcp_src, tcp_dst, tcp_seq, tcp_ack_seq, tcp_off_res, tcp_flags, tcp_win) + pack('!H', tcp_urg_ptr)
+
+#Combine all of the headers and the user data
+packet = ip_header + tcp_hdr + user_data
+
+#Send the packet
+s.sendto(packet, (dst_ip, 0))
+
+STREAM SOCKET#!/bin/python3
+
+import socket
+# This can also be accomplished by using s = socket.socket() due to defaults 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+ipaddr = '10.1.1.25'
+port = 4869
+
+s.connect((ipaddr, port))
+
+# To send a string as byte-like object, add the prefix b to string. \n is used to go to the next line(eg hit enter)
+
+s.send(b'Hi')
+
+# It is Recommend that the buffersize used with recvfrom is a power of 2 and not a very large number of bits
+
+response, conn = s.recvfrom(1024)
+
+# in order to recieve a message that is sent as a bytes like object you must decode into utf-8 (default)
+print(response.decode())
+
+s.close()
+
+DATAGRAM SOCKET
+
+import socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 
+ipaddr = '10.10.0.40'
+port = 10000
+
+# Send to a string as a bytes like object add the prefix b to the string. \n is used to the next line
+
+s.sendto(b'Disturbed', (ipaddr,port))
+
+# Recommneded buffersize used wtih rrecvfrom is a power of 3 and not ver large
+
+response, conn = s.recvfrom(1024)
+
+#Decode defaults utf-8
+print(response.decode())
+
+Scan
+#!/bin/bash
+echo "Enter network address (e.g. 192.168.0): "
+read net
+echo "Enter starting host range (e.g. 1): "
+read start
+echo "Enter ending host range (e.g. 254): "
+read end
+echo "Enter ports space-delimited (e.g. 21-23 80): "
+read ports
+for ((i=$start; $i<=$end; i++))
+do
+    nc -nvzw1 $net.$i $ports 2>&1 | grep -E 'succ|open'
+done
+# (-v) running verbosely (-v on Linux, -vv on Windows),
+# (-n) not resolving names. numeric only IP(no D.S)
+# (-z) without sending any data. zero-I/O mode(used for scanning)
+#(-w1) waiting no more than 1second for a connection to occur
+# (2>&1) redirect STDERR to STDOUT. Results of scan are errors and need to redirect to output to grep
+# (-E) Interpret PATTERN as an extended regular expression
+# ( | grep open) for Debian to display only open connections
+# ( | grep succeeded) for Ubuntu to display only the open connections
